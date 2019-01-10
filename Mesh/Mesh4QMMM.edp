@@ -1,0 +1,74 @@
+/* Construct ball mesh for QMMM model given Rqm, Rmm */
+
+load "medit"
+
+/* parameter */
+/* boundary */
+real[int] R = [8.0, 32.0, 56.0, 80.0]; 
+/* nodes */
+int[int] K = [60, 20, 200, 25];
+int a = 0;
+real b = 2*pi;
+
+border bb(t=a, b; i)
+{
+    x = R[i]*cos(t);
+    y = R[i]*sin(t);
+    label = i+1;
+}
+
+mesh Th = buildmesh(bb(K));
+// plot(Th, fill=1, wait=1);
+medit("QMMMballmesh", wait=1, Th);
+savemesh(Th, "QMMMball.mesh");
+
+
+/* Construct hex mesh for QMMM model given Rqm, Rmm */
+/* boundary */
+real[int] Rh = [8.5, 32.5, 56.5, 80.5];
+
+/* parameter */
+real[int] cx1 = [0.0, 1.5, 1.5, 0.0, -1.5, -1.5];
+real[int] cx2 = [1.0, 0.5, -0.5, -1.0, -0.5, 0.5];
+real[int] cy1 = [-1.0, -2.0, 2.0, 1.0, 2.0, -2.0];
+real[int] cy2 = [0.0, 1.0, -1.0, 0.0, 1.0, -1.0];
+
+int[int] Ks(6), Km(6), Kl(6), Kf(6);
+Ks = 12; 
+Km = 5;
+Kl = 30;
+Kf = 6;
+
+/* border b(t=a1, a2){x=c1+c2*t; y=c3+c4*t;} */
+
+border bs(t=-R[0], Rh[0]; i)
+{
+    x = cx1[i] * Rh[0] + cx2[i] * t;
+    y = sqrt(3) * cy1[i] * Rh[0] + sqrt(3) * cy2[i] * x;
+    label = i+1;
+}
+
+border bm(t=-Rh[1], Rh[1]; i)
+{
+    x = cx1[i] * Rh[1] + cx2[i] * t;
+    y = sqrt(3) * cy1[i] * Rh[1] + sqrt(3) * cy2[i] * x;
+    label = i+1;
+}
+
+border bl(t=-Rh[2], Rh[2]; i)
+{
+    x = cx1[i] * Rh[2] + cx2[i] * t;
+    y = sqrt(3) * cy1[i] * Rh[2] + sqrt(3) * cy2[i] * x;
+    label = i+1;
+}
+
+border bf(t=-Rh[3], Rh[3]; i)
+{
+    x = cx1[i] * Rh[3] + cx2[i] * t;
+    y = sqrt(3) * cy1[i] * Rh[3] + sqrt(3) * cy2[i] * x;
+    label = i+1;
+}
+
+mesh Thh = buildmesh(bs(Ks) + bm(Km) + bl(Kl) + bf(Kf));
+// plot(Th, fill=1, wait=1);
+medit("QMMMhexmesh", wait=1, Thh);
