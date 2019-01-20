@@ -7,7 +7,7 @@
 #	: maxh
 ##################################################
 
-export Mesh
+module MESH
 
 type Mesh
 	Vertex::Array{Float64,2}
@@ -18,7 +18,7 @@ type Mesh
 end
 
 function Mesh(Vertex::Array{Float64,2}, Triangle::Array{Int64,2})
-	Incenter, MaxH, Area = mesh_incenter_maxH_area(Vertex, Triangle)
+	Incenter, MaxH, Area = mesh_incenter_maxh_area(Vertex, Triangle)
 	return Mesh(Vertex, Triangle, Incenter, MaxH, Area)
 end
 
@@ -65,4 +65,6 @@ function mesh_incenter_maxh_area(Vex, Tri)
 		Area[n] = s
 	end
 	return Incenter, MaxH, Area
+end
+
 end
