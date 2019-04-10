@@ -1,0 +1,22 @@
+// read data from file
+// parameters
+// input:
+//		f1.txt
+//		f2.txt
+// output:
+//		null
+
+real[int] f1(127);
+real[int] f2(127);
+
+{
+ifstream f("f1.txt");
+f >> f1; }
+
+cout << f1 << endl;
+
+{
+ifstream f("f2.txt");
+f >> f2; }
+
+cout << f2 << endl;
